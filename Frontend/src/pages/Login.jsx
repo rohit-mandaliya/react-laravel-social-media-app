@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { api } from "../api";
 import { toast } from "react-toastify";
-import useUserContext from "../contexts/userContext";
-import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../contexts/userContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [inputs, setInputs] = useState({});
@@ -65,6 +65,16 @@ const Login = () => {
           >
             Login
           </button>
+          <br />
+          <p className="mt-2">
+            Not have any account ?{" "}
+            <Link
+              to="/signup"
+              className="text-lg text-gray-800 underline cursor-pointer"
+            >
+              Signup
+            </Link>
+          </p>
         </div>
       </form>
     </div>

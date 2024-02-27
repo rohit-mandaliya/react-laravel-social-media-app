@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useUserContext from "../contexts/userContext";
+import { useUserContext } from "../contexts/userContext";
 import { toast } from "react-toastify";
 import { api } from "../api";
 

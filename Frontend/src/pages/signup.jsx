@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { api } from "../api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import useUserContext from "../contexts/userContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../contexts/userContext";
 
 // import { useQuery, useMutation, queryCache } from "react-query";
 
@@ -94,6 +94,16 @@ const Signup = () => {
           >
             Sign Up
           </button>
+          <br />
+          <p className="mt-2">
+            Have an account ?{" "}
+            <Link
+              to="/login"
+              className="text-lg text-gray-800 underline cursor-pointer"
+            >
+              Login
+            </Link>
+          </p>
         </div>
       </form>
     </div>
