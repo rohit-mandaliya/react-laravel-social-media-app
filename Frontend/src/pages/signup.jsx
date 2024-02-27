@@ -1,7 +1,18 @@
 import React, { useState } from "react";
+import { api } from "../api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import useUserContext from "../contexts/userContext";
+
+// import { useQuery, useMutation, queryCache } from "react-query";
 
 const Signup = () => {
   const [inputs, setInputs] = useState({});
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const { setToken } = useUserContext();
 
   const handleChange = (e) => {
     setInputs({
@@ -10,9 +21,20 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
+
+    try {
+      const register = await api.post("/register", inputs);
+      toast(register.data.message);
+
+      setToken(register.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err);
+      setErrors(err.response.data.errors);
+      toast.error("Something went wrong!");
+    }
   };
 
   const fields = [
@@ -48,21 +70,27 @@ const Signup = () => {
       <form action="#" method="post">
         <div className="mt-5">
           {fields.map((field) => (
-            <input
-              type={field.type}
-              className="p-3 mt-5 border-black border w-full rounded-xl"
-              id={field.id}
-              name={field.name}
-              placeholder={field.placeholder}
-              autoFocus={field.name == "name" ? true : false}
-              onChange={handleChange}
-            />
+            <>
+              <input
+                key={field.id}
+                type={field.type}
+                className="p-3 mt-5 border-black border  w-full rounded-xl"
+                id={field.id}
+                name={field.name}
+                placeholder={field.placeholder}
+                autoFocus={field.name == "name" ? true : false}
+                onChange={handleChange}
+              />
+              <span key={field.id + "-error"} className="text-red-500">
+                {errors ? errors[field.name] : null}
+              </span>
+            </>
           ))}
         </div>
         <div className="text-center">
           <button
             onClick={handleSubmit}
-            className="p-2 mt-8 w-24 ml-4 rounded-lg font-medium border-white border duration-500 bg-black text-white hover:text-black hover:bg-white"
+            className="p-2 mt-8 w-24 ml-4 rounded-lg font-medium border-white border duration-500 bg-black text-white"
           >
             Sign Up
           </button>

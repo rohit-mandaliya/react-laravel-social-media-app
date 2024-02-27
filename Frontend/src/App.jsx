@@ -1,12 +1,16 @@
-import { useState } from "react";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { UserProvider } from "./contexts/userContext";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Outlet />
+      <UserProvider>
+        <Navbar />
+        <ToastContainer />
+        <Outlet />
+      </UserProvider>
     </>
   );
 }
