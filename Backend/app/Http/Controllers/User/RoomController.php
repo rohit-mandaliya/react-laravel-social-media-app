@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,15 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only(['room_id', 'name']);
+
+        try {
+            Room::create($data);
+            return response()->json(['message' => 'Room Created Successfully'], 200);
+        } catch (\Exception $e) {
+            info('dsdssdfsd');
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**

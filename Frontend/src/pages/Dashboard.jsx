@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { api } from "../api";
+import { toast } from "react-toastify";
+import { useUserContext } from "../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const [inputs, setInputs] = useState({});
+  const { token } = useUserContext();
+  const navigate = useNavigate();
+
   let fields = [
     {
       id: 1,
@@ -15,8 +22,23 @@ const Dashboard = () => {
     },
   ];
 
-  const handleChange = async () => {
-    const store = await api.post("room/create", inputs);
+  const handleChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    try {
+      const store = await api.post("room/create", inputs, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success(store.data.message);
+      navigate("/chat");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   };
   return (
     <div>
@@ -29,11 +51,14 @@ const Dashboard = () => {
             name={field.name}
             onChange={handleChange}
             placeholder={field.placeholder}
-            autoFocus={field.name == "email" ? true : false}
+            autoFocus={field.name == "room_id" ? true : false}
           />
         ))}
         <div className="text-center">
-          <button className="p-2 mt-4 rounded-lg font-medium border-white border duration-500 bg-black text-white">
+          <button
+            onClick={onSubmit}
+            className="p-2 mt-4 rounded-lg font-medium border-white border duration-500 bg-black text-white"
+          >
             Create Room
           </button>
         </div>

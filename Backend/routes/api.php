@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\RoomController;
 use App\Http\Controllers\User\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post("room/create", [RoomController::class, 'store']);
 });
 
 Route::post('/register', [LoginController::class, 'register']);

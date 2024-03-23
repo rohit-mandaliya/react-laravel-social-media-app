@@ -19,12 +19,19 @@ class LoginController extends Controller
 
             $user = User::create($data);
 
-            $token = $user->createToken('main')->plainTextToken;
+            if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
 
-            return response()->json([
-                'message' => 'Your Account Created Successfully',
-                'token' => $token
-            ], 200);
+                $user = Auth::user();
+
+                $token = $user->createToken('mainToken')->accessToken;
+
+                return response()->json([
+                    'message' => 'Your Account Created Successfully',
+                    'token' => $token
+                ], 200);
+            } else {
+                return response()->json(['message' => 'Invalid Credentials'], 403);
+            }
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 403);
         }
@@ -42,7 +49,7 @@ class LoginController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = User::find(Auth::user()->id);
-                $token = $user->createToken('main')->plainTextToken;
+                $token = $user->createToken('main')->accessToken;
 
                 return response()->json(['message' => 'Login Successfully', 'token' => $token], 200);
             } else {

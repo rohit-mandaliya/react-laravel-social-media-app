@@ -36,7 +36,6 @@ const IsAuthenticated = ({ condition }) => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      {/* <Route path="" element={}/> */}
       <Route element={<IsAuthenticated condition={true} />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
